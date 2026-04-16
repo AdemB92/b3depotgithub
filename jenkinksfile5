@@ -1,18 +1,38 @@
 pipeline {
     agent any
+
     stages {
         stage('CheckOut-SCM') {
             steps {
                 cleanWs()
-                git branch: 'main', credentialsId: 'etudiant', url: 'https://github.com/AdemB92/b3depotgithub.git'
+                git branch: 'main',
+                    credentialsId: 'etudiant',
+                    url: 'https://github.com/AdemB92/b3depotgithub.git'
             }
         }
+
         stage('create-macvlan192') {
             steps {
-                sh 'docker network rm macvlan192'
-                sh 'docker network create -d macvlan --subnet=192.168.1.0/24 --gateway=192.168.1.254 -o parent=ens33 macvlan192'
-                sh 'docker network ls'
-                sh 'docker inspect macvlan192'
+                sh '''
+                echo "Suppression ancien conteneur si existe..."
+                docker rm -f contapache01 2>/dev/null || true
+
+                echo "Suppression ancien réseau si existe..."
+                docker network rm macvlan192 2>/dev/null || true
+
+                echo "Création du réseau macvlan..."
+                docker network create -d macvlan \
+                  --subnet=192.168.1.0/24 \
+                  --gateway=192.168.1.254 \
+                  -o parent=ens33 \
+                  macvlan192
+
+                echo "Liste des réseaux :"
+                docker network ls
+
+                echo "Inspection du réseau :"
+                docker inspect macvlan192
+                '''
             }
         }
     }
