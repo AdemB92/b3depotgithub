@@ -7,7 +7,7 @@ pipeline {
                 cleanWs()
                 git branch: 'main', 
                     credentialsId: 'etudiant', 
-                    url: 'https://github.com/AdemB92/b3depogithub.git'
+                    url: 'https://github.com/AdemB92/b3depotgithub.git'
             }
         }
  
