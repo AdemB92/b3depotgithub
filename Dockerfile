@@ -21,15 +21,15 @@ RUN mkdir -p /var/run/sshd && ssh-keygen -A
 #RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 #RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
 #RUN sed -i 's/^PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
-#RUN sed -i 's/#PubKeyAuthentication yes/PubKeyAuthentication yes/' /etc/ssh/sshd_config
+#RUN sed -i 's/^PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
 
 ### config ssh_config
 RUN echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
 RUN echo 'Port 22' >> /etc/ssh/sshd_config
 RUN echo 'PubkeyAuthentication yes' >> /etc/ssh/sshd_config
-#RUN echo 'PubkeyAuthentication yes' >> /etc/ssh/sshd_config
+RUN echo 'PubkeyAuthentication yes' >> /etc/ssh/sshd_config
 
-# Exposer nginx + SSH
+# Exposer Apache + SSH
 EXPOSE 80 22
 
 RUN echo "root:password" | chpasswd
